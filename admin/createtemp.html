@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Docs-like Editor</title>
+    <style>
+        body {
+            font-family: 'Arial, sans-serif';
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        #toolbar {
+            background-color: #f1f1f1;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #editor {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-top: none;
+            min-height: 300px;
+        }
+
+        button {
+            background-color: transparent;
+            border: none;
+            padding: 5px;
+            margin-right: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toolbar">
+        <div id="font-controls">
+            <button onclick="changeFontSize(-2)">A-</button>
+            <button onclick="changeFontSize(2)">A+</button>
+        </div>
+        <div id="align-controls">
+            <button onclick="setAlignment('left')">L</button>
+            <button onclick="setAlignment('center')">C</button>
+            <button onclick="setAlignment('right')">R</button>
+            <button onclick="setAlignment('justify')">J</button>
+        </div>
+        <div id="color-controls">
+            <input type="color" onchange="changeTextColor(this.value)">
+        </div>
+    </div>
+
+    <div id="editor" contenteditable>
+        <p>Start typing...</p>
+    </div>
+
+    <script>
+        function changeFontSize(value) {
+            document.execCommand('fontSize', false, '4');
+            const selection = window.getSelection();
+            const span = document.createElement('span');
+            span.style.fontSize = `${parseInt(getComputedStyle(selection.focusNode.parentElement).fontSize) + value}px`;
+            selection.getRangeAt(0).surroundContents(span);
+        }
+
+        function setAlignment(align) {
+            document.execCommand('justify' + align);
+        }
+
+        function changeTextColor(color) {
+            document.execCommand('foreColor', false, color);
+        }
+    </script>
+
+</body>
+</html>
